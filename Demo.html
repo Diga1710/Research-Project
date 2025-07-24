@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajanta Caves QR Info System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #2b5876, #4e4376);
+      color: white;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: white;
+      color: #333;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    }
+
+    .qr-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .qr-section input[type="file"] {
+      display: none;
+    }
+
+    .qr-section label {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4e4376;
+      color: white;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    .info-display {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.4);
+      margin-top: 50px;
+      font-size: 0.9rem;
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .language-section {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Ajanta Caves QR Info System</h1>
+</header>
+
+<div class="container">
+
+  <div class="language-section">
+    <label for="langSelect"><strong>Select Language:</strong></label>
+    <select id="langSelect">
+      <option value="en">English</option>
+      <option value="hi">Hindi</option>
+      <option value="mr">Marathi</option>
+      <option value="fr">French</option>
+      <option value="de">German</option>
+      <option value="ja">Japanese</option>
+    </select>
+  </div>
+
+  <div class="qr-section">
+    <label for="qrInput">📷 Scan QR Code</label>
+    <input type="file" id="qrInput" accept="image/*">
+  </div>
+
+  <div class="info-display" id="textContent">
+    📜 Text content will appear here after scanning the QR code.
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2025 Project by Digambar Chaudhari & Team | KBCNMU
+</footer>
+
+<script>
+  document.getElementById('qrInput').addEventListener('change', function () {
+    // Simulate QR scanning (mock result)
+    const lang = document.getElementById('langSelect').value;
+    const translations = {
+      en: "Welcome to Ajanta Caves. Explore ancient art through QR code guided information.",
+      hi: "अजंता की गुफाओं में आपका स्वागत है। क्यूआर कोड द्वारा निर्देशित जानकारी से प्राचीन कला का अन्वेषण करें।",
+      mr: "अजिंठा लेण्यांमध्ये तुमचं स्वागत आहे. QR कोडद्वारे माहिती घेऊन प्राचीन कलेचा अनुभव घ्या.",
+      fr: "Bienvenue aux grottes d'Ajanta. Explorez l'art ancien via des informations guidées par QR code.",
+      de: "Willkommen in den Ajanta-Höhlen. Entdecken Sie alte Kunst mit QR-Code-geführter Information.",
+      ja: "アジャンター石窟へようこそ。QRコードで案内された情報で古代芸術を探索しましょう。"
+    };
+    document.getElementById('textContent').textContent = translations[lang] || translations['en'];
+  });
+</script>
+
+</body>
+</html>
