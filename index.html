@@ -1,135 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ajanta Caves QR Info System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #2b5876, #4e4376);
-      color: white;
-    }
-
-    header {
-      padding: 20px;
-      text-align: center;
-      background-color: rgba(0,0,0,0.4);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 30px auto;
-      background: white;
-      color: #333;
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-    }
-
-    .qr-section {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .qr-section input[type="file"] {
-      display: none;
-    }
-
-    .qr-section label {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #4e4376;
-      color: white;
-      border-radius: 30px;
-      cursor: pointer;
-    }
-
-    .info-display {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f1f1f1;
-      border-radius: 10px;
-      font-size: 1.1rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: rgba(0,0,0,0.4);
-      margin-top: 50px;
-      font-size: 0.9rem;
-    }
-
-    select {
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-
-    .language-section {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ajanta QR Info System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
-<body>
 
-<header>
-  <h1>Ajanta Caves QR Info System</h1>
-</header>
+<body class="bg-gray-100 text-gray-800 font-sans">
 
-<div class="container">
+  <!-- Header -->
+  <header class="bg-yellow-800 text-white py-5 text-center">
+    <h1 class="text-3xl font-bold">QR Based Global Information System</h1>
+    <p class="text-lg">Ajanta Caves</p>
+  </header>
 
-  <div class="language-section">
-    <label for="langSelect"><strong>Select Language:</strong></label>
-    <select id="langSelect">
-      <option value="en">English</option>
-      <option value="hi">Hindi</option>
-      <option value="mr">Marathi</option>
-      <option value="fr">French</option>
-      <option value="de">German</option>
-      <option value="ja">Japanese</option>
-    </select>
-  </div>
+  <!-- Scanner Section -->
+  <section class="py-8 text-center bg-yellow-50">
+    <h2 class="text-2xl font-semibold mb-2">Scan QR Code</h2>
+    <p class="mb-4">Scan a cave QR code to view its information.</p>
+    <div id="reader" class="mx-auto w-full max-w-md"></div>
+  </section>
 
-  <div class="qr-section">
-    <label for="qrInput">📷 Scan QR Code</label>
-    <input type="file" id="qrInput" accept="image/*">
-  </div>
+  <!-- Dynamic Content Display -->
+  <section class="py-10 px-4 bg-white">
+    <div id="cave-info" class="max-w-4xl mx-auto text-center hidden">
+      <h3 id="cave-title" class="text-xl font-bold mb-2"></h3>
+      <img id="cave-img" src="" alt="Cave Image" class="mx-auto mb-4 rounded shadow-md max-h-80" />
+      <p id="cave-desc" class="text-justify leading-relaxed"></p>
+    </div>
 
-  <div class="info-display" id="textContent">
-    📜 Text content will appear here after scanning the QR code.
-  </div>
+    <div id="not-found" class="text-red-600 text-center font-medium hidden mt-4">
+      No matching cave information found.
+    </div>
+  </section>
 
-</div>
+  <!-- Footer -->
+  <footer class="bg-yellow-800 text-white text-center py-4">
+    <p class="text-sm">© 2025 MCA Project | Ajanta Caves QR System</p>
+  </footer>
 
-<footer>
-  &copy; 2025 Project by Digambar Chaudhari & Team | KBCNMU
-</footer>
-
-<script>
-  document.getElementById('qrInput').addEventListener('change', function () {
-    // Simulate QR scanning (mock result)
-    const lang = document.getElementById('langSelect').value;
-    const translations = {
-      en: "Welcome to Ajanta Caves. Explore ancient art through QR code guided information.",
-      hi: "अजंता की गुफाओं में आपका स्वागत है। क्यूआर कोड द्वारा निर्देशित जानकारी से प्राचीन कला का अन्वेषण करें।",
-      mr: "अजिंठा लेण्यांमध्ये तुमचं स्वागत आहे. QR कोडद्वारे माहिती घेऊन प्राचीन कलेचा अनुभव घ्या.",
-      fr: "Bienvenue aux grottes d'Ajanta. Explorez l'art ancien via des informations guidées par QR code.",
-      de: "Willkommen in den Ajanta-Höhlen. Entdecken Sie alte Kunst mit QR-Code-geführter Information.",
-      ja: "アジャンター石窟へようこそ。QRコードで案内された情報で古代芸術を探索しましょう。"
+  <!-- JavaScript -->
+  <script>
+    // Sample cave data (can be replaced with Firebase or API calls)
+    const caveData = {
+      cave1: {
+        title: "Cave 1 - Ajanta",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ajanta_Cave_1_%28cropped%29.jpg/640px-Ajanta_Cave_1_%28cropped%29.jpg",
+        description: "Cave 1 is a richly decorated Vihara (monastery) featuring intricate paintings and sculptures from the Gupta period. It includes the famous Bodhisattva Padmapani fresco."
+      },
+      cave2: {
+        title: "Cave 2 - Ajanta",
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Ajanta_Cave_2%2C_front_view.jpg/640px-Ajanta_Cave_2%2C_front_view.jpg",
+        description: "Cave 2 is another monastery, noted for its well-preserved wall paintings including depictions of Jataka tales, beautifully painted ceilings, and ornate doorways."
+      }
+      // Add more caves as needed
     };
-    document.getElementById('textContent').textContent = translations[lang] || translations['en'];
-  });
-</script>
 
+    function showCaveInfo(code) {
+      const id = code.trim().toLowerCase().replace(/.*cave/, "cave");
+      const info = caveData[id];
+
+      const infoDiv = document.getElementById("cave-info");
+      const notFoundDiv = document.getElementById("not-found");
+
+      if (info) {
+        document.getElementById("cave-title").innerText = info.title;
+        document.getElementById("cave-img").src = info.img;
+        document.getElementById("cave-desc").innerText = info.description;
+
+        infoDiv.classList.remove("hidden");
+        notFoundDiv.classList.add("hidden");
+      } else {
+        infoDiv.classList.add("hidden");
+        notFoundDiv.classList.remove("hidden");
+      }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+      console.log("Scanned:", decodedText);
+      showCaveInfo(decodedText);
+    }
+
+    function onScanFailure(error) {
+      // Optionally handle errors here
+    }
+
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader",
+      { fps: 10, qrbox: 250 },
+      false
+    );
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+  </script>
 </body>
 </html>
